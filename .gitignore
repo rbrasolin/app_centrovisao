@@ -1,0 +1,57 @@
+# .gitignore - colocar na raiz do projeto
+
+# ── Ambiente virtual (não subir)
+.venv/
+venv/
+env/
+ENV/
+
+# ── Credenciais e chaves (NUNCA subir)
+credenciais/
+credenciais/*.json
+*.key
+*.pem
+*.p12
+*.pfx
+*.secret
+.env
+
+# ── Backups locais e arquivos gerados
+z_backup/
+*.zip
+*.tar.gz
+
+# ── Arquivos do sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── Bytecode Python / caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# ── Logs e bancos locais
+*.log
+*.sqlite3
+*.db
+
+# ── IDEs / editores
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# ── Arquivos temporários / gerados
+*.tmp
+*.temp
+
+# ── Arquivos de lote (opcional) — se quiser incluir scripts de instalação, remova esta linha
+*.bat
+
+# ── Build / distribuição
+build/
+dist/
+
+# ── Streamlit: mantenha a pasta 'streamlit' se precisar, MAS NUNCA subir secrets
+.streamlit/secrets.toml
