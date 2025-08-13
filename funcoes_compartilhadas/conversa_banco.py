@@ -18,20 +18,30 @@ _scopes = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-# Híbrido: local (JSON) ou online (Secrets)
-try:
-    if hasattr(st, "secrets") and "gcp_service_account" in getattr(st, "secrets", {}):
-        # Ambiente online (Streamlit Cloud)
-        credenciais_dict = dict(st.secrets["gcp_service_account"])
-        creds = Credentials.from_service_account_info(credenciais_dict, scopes=_scopes)
-    else:
-        # Ambiente local (arquivo JSON na pasta credenciais)
-        CAMINHO_CREDENCIAL = os.path.join("credenciais", "gdrive_credenciais.json")
-        creds = Credentials.from_service_account_file(CAMINHO_CREDENCIAL, scopes=_scopes)
-except Exception as e:
-    st.error(f"Erro ao carregar credenciais: {e}")
-    raise
+# Função para carregar credenciais de forma segura
+def carregar_credenciais():
+    """
+    Carrega credenciais do Google para uso com gspread.
+    - Online (Streamlit Cloud): lê do bloco [gcp_service_account] em Secrets.
+    - Local: lê de credenciais/gdrive_credenciais.json.
+    """
+    try:
+        if (
+            os.environ.get("STREAMLIT_RUNTIME")  # estamos no runtime do Streamlit
+            and hasattr(st, "secrets")
+            and "gcp_service_account" in st.secrets
+        ):
+            credenciais_dict = dict(st.secrets["gcp_service_account"])
+            return Credentials.from_service_account_info(credenciais_dict, scopes=_scopes)
+        else:
+            CAMINHO_CREDENCIAL = os.path.join("credenciais", "gdrive_credenciais.json")
+            return Credentials.from_service_account_file(CAMINHO_CREDENCIAL, scopes=_scopes)
+    except Exception as e:
+        st.error(f"Erro ao carregar credenciais: {e}")
+        raise
 
+# Autoriza acesso ao Google Sheets
+creds = carregar_credenciais()
 _gc = gspread.authorize(creds)
 _sheet = _gc.open_by_url(URL_PLANILHA)
 
