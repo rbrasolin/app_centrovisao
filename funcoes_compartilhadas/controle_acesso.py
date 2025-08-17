@@ -258,3 +258,5 @@ def menus_liberados():
     df = df[df["ID_Usuario"] == usuario_id]
 
     return df.to_dict(orient="records")
+
+#fim    

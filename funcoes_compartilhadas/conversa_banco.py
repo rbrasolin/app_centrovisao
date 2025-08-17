@@ -182,3 +182,5 @@ def verificar_permissao_usuario(usuario_id: str, funcionalidade_nome: str) -> bo
     funcionalidade_id = funcionalidade_id[funcionalidade_id["Nome"] == funcionalidade_nome]["ID"].values[0]
     permissoes_usuario = permissoes[permissoes["ID_Usuario"] == usuario_id]
     return funcionalidade_id in permissoes_usuario["ID_Funcionalidade"].values
+
+#fim
