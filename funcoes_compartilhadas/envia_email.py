@@ -1,4 +1,4 @@
-# funcoes_compartilhadas/envia_email.py
+# -*- coding: utf-8 -*-
 import smtplib
 from email.mime.text import MIMEText
 import streamlit as st
@@ -11,7 +11,7 @@ def _carregar_credenciais_gmail():
     - Local: usa arquivo credenciais/gmail.py
     """
     try:
-        if os.environ.get("STREAMLIT_RUNTIME") and hasattr(st, "secrets") and "gmail" in st.secrets:
+        if hasattr(st, "secrets") and "gmail" in st.secrets:
             usuario = st.secrets["gmail"]["usuario"]
             senhaapp = st.secrets["gmail"]["senhaapp"]
             smtp = st.secrets["gmail"].get("SMTP_SERVIDOR", "smtp.gmail.com")
@@ -22,9 +22,9 @@ def _carregar_credenciais_gmail():
             return USUARIO, SENHA_APP, SMTP_SERVIDOR, SMTP_PORTA
     except Exception as e:
         raise ImportError(
-            "Erro ao carregar credenciais do Gmail: "
-            "Configure [gmail] em secrets.toml no Streamlit Cloud "
-            "OU crie credenciais/gmail.py localmente."
+            "Erro ao carregar credenciais do Gmail.\n"
+            "→ Online: configure [gmail] em secrets.toml\n"
+            "→ Local: crie credenciais/gmail.py com USUARIO, SENHA_APP, SMTP_SERVIDOR, SMTP_PORTA"
         ) from e
 
 
