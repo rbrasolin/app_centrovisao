@@ -19,7 +19,7 @@ try:
     URL_PLANILHA = st.secrets["G_SHEET_URL"]
 except Exception:
     # fallback local
-    URL_PLANILHA = "https://docs.google.com/spreadsheets/d/SEU_ID/edit#gid=0"
+    URL_PLANILHA = "https://docs.google.com/spreadsheets/d/12cuz76GsmtVqlbFTsMRXbhqiUW8kVc2tbTAI-CLwAR0/edit?gid=0#gid=0"
 
 _SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
