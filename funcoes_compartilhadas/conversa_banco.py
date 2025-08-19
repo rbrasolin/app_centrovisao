@@ -15,9 +15,9 @@ from funcoes_compartilhadas.cria_id import cria_id
 # ===================================================
 
 # URL da planilha
-if hasattr(st, "secrets") and "G_SHEET_URL" in st.secrets:
+try:
     URL_PLANILHA = st.secrets["G_SHEET_URL"]
-else:
+except Exception:
     # fallback local
     URL_PLANILHA = "https://docs.google.com/spreadsheets/d/SEU_ID/edit#gid=0"
 
@@ -29,14 +29,14 @@ _SCOPES = [
 def _cred_from_secrets() -> Credentials | None:
     """Tenta carregar credenciais do st.secrets"""
     try:
-        if hasattr(st, "secrets") and "gcp_service_account" in st.secrets:
+        if "gcp_service_account" in st.secrets:
             data = dict(st.secrets["gcp_service_account"])
             return Credentials.from_service_account_info(data, scopes=_SCOPES)
-        if hasattr(st, "secrets") and "gcp_service_account_json" in st.secrets:
+        if "gcp_service_account_json" in st.secrets:
             data = json.loads(st.secrets["gcp_service_account_json"])
             return Credentials.from_service_account_info(data, scopes=_SCOPES)
-    except Exception as e:
-        st.error(f"Erro ao ler credenciais do secrets: {e}")
+    except Exception:
+        return None
     return None
 
 def _cred_from_file() -> Credentials | None:

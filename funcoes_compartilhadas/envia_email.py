@@ -2,7 +2,6 @@
 import smtplib
 from email.mime.text import MIMEText
 import streamlit as st
-import os
 
 def _carregar_credenciais_gmail():
     """
@@ -11,21 +10,15 @@ def _carregar_credenciais_gmail():
     - Local: usa arquivo credenciais/gmail.py
     """
     try:
-        if hasattr(st, "secrets") and "gmail" in st.secrets:
-            usuario = st.secrets["gmail"]["usuario"]
-            senhaapp = st.secrets["gmail"]["senhaapp"]
-            smtp = st.secrets["gmail"].get("SMTP_SERVIDOR", "smtp.gmail.com")
-            porta = int(st.secrets["gmail"].get("SMTP_PORTA", 587))
-            return usuario, senhaapp, smtp, porta
-        else:
-            from credenciais.gmail import USUARIO, SENHA_APP, SMTP_SERVIDOR, SMTP_PORTA
-            return USUARIO, SENHA_APP, SMTP_SERVIDOR, SMTP_PORTA
-    except Exception as e:
-        raise ImportError(
-            "Erro ao carregar credenciais do Gmail.\n"
-            "→ Online: configure [gmail] em secrets.toml\n"
-            "→ Local: crie credenciais/gmail.py com USUARIO, SENHA_APP, SMTP_SERVIDOR, SMTP_PORTA"
-        ) from e
+        usuario = st.secrets["gmail"]["usuario"]
+        senhaapp = st.secrets["gmail"]["senhaapp"]
+        smtp = st.secrets["gmail"].get("SMTP_SERVIDOR", "smtp.gmail.com")
+        porta = int(st.secrets["gmail"].get("SMTP_PORTA", 587))
+        return usuario, senhaapp, smtp, porta
+    except Exception:
+        # fallback local
+        from credenciais.gmail import USUARIO, SENHA_APP, SMTP_SERVIDOR, SMTP_PORTA
+        return USUARIO, SENHA_APP, SMTP_SERVIDOR, SMTP_PORTA
 
 
 def enviar_email(destinatario, assunto, mensagem):
